@@ -1,6 +1,7 @@
 package com.zybooks.expensetrackerapp
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -41,4 +42,28 @@ class MainActivity : AppCompatActivity() {
                 editAmount.text.clear()
             }
         }
+    override fun onStart() {
+        super.onStart()
+        Log.d("MainActivity", "onStart is called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("MainActivity", "onResume is called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("MainActivity", "onPause is called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("MainActivity", "onStop is called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("MainActivity", "onDestroy is called")
+    }
     }
