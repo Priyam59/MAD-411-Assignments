@@ -1,5 +1,7 @@
 package com.zybooks.expensetrackerapp
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -15,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         private lateinit var recyclerView: RecyclerView
         private lateinit var expenseList: MutableList<Expense>
         private lateinit var adapter: ExpenseAdapter
+        private lateinit var tipButton: Button
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
             editAmount = findViewById(R.id.amount)
             addButton = findViewById(R.id.add)
             recyclerView = findViewById(R.id.expenses)
+            tipButton = findViewById(R.id.tip)
 
             expenseList = mutableListOf()
             adapter = ExpenseAdapter(expenseList)
@@ -41,6 +45,14 @@ class MainActivity : AppCompatActivity() {
                 editName.text.clear()
                 editAmount.text.clear()
             }
+
+            tipButton.setOnClickListener{
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.manulife.ca/personal/plan-and-learn/healthy-finances/financial-planning/ten-simple-money-management-tips.html"))
+
+                startActivity(intent)
+            }
+
+
         }
     override fun onStart() {
         super.onStart()

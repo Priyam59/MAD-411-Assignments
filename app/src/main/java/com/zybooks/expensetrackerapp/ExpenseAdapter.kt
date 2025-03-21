@@ -14,6 +14,7 @@ class ExpenseAdapter (private val expenseList: MutableList<Expense>) :
             val expenseName: TextView = itemView.findViewById(R.id.name)
             val expenseAmount: TextView = itemView.findViewById(R.id.amount)
             val deleteButton: Button = itemView.findViewById(R.id.delete)
+            val showButton : Button = itemView.findViewById(R.id.details)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
@@ -29,6 +30,16 @@ class ExpenseAdapter (private val expenseList: MutableList<Expense>) :
             holder.deleteButton.setOnClickListener {
                 expenseList.removeAt(position)
                 notifyItemRemoved(position)
+            }
+
+            holder.showButton.setOnClickListener{
+                val intent = android.content.Intent(holder.itemView.context, ExpenseDetailsActivity::class.java)
+
+                intent.putExtra("expenseName", currentExpense.name)
+                intent.putExtra("expenseAmount", currentExpense.amount)
+
+
+                holder.itemView.context.startActivity(intent)
             }
         }
 
