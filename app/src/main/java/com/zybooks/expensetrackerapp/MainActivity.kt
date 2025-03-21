@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -52,8 +54,29 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
+            val headerFragment = HeaderFragment()
+            val fragmentManager: FragmentManager = supportFragmentManager
+            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+            transaction.add(R.id.header, headerFragment)
+            transaction.commit()
+            transaction.replace(R.id.header,headerFragment)
+            transaction.commit()
+
+            val footerFragment = FooterFragment()
+            val transaction2: FragmentTransaction = fragmentManager.beginTransaction()
+            transaction2.add(R.id.totalExpense, footerFragment)
+            transaction2.replace(R.id.totalExpense,footerFragment)
+            transaction2.commit()
 
         }
+
+    fun updateTotalExpenses() {
+        var total = 0.0
+        for (expense in expenseList) {
+            //total = total + expense.amount
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         Log.d("MainActivity", "onStart is called")
