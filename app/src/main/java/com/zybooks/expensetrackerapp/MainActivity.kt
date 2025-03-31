@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                 val expense = Expense(name, amount)
                 expenseList.add(expense)
                 adapter.notifyDataSetChanged()
-
+                updateTotalExpenses()
                 editName.text.clear()
                 editAmount.text.clear()
             }
@@ -59,13 +59,11 @@ class MainActivity : AppCompatActivity() {
             val transaction: FragmentTransaction = fragmentManager.beginTransaction()
             transaction.add(R.id.header, headerFragment)
             transaction.commit()
-            transaction.replace(R.id.header,headerFragment)
-            transaction.commit()
 
             val footerFragment = FooterFragment()
             val transaction2: FragmentTransaction = fragmentManager.beginTransaction()
-            transaction2.add(R.id.totalExpense, footerFragment)
-            transaction2.replace(R.id.totalExpense,footerFragment)
+            transaction2.add(R.id.footer, footerFragment)
+            transaction2.replace(R.id.footer,footerFragment)
             transaction2.commit()
 
         }
@@ -73,7 +71,8 @@ class MainActivity : AppCompatActivity() {
     fun updateTotalExpenses() {
         var total = 0.0
         for (expense in expenseList) {
-            //total = total + expense.amount
+            val amount = expense.amount.toDoubleOrNull() ?: 0.0
+            total += amount
         }
     }
 
