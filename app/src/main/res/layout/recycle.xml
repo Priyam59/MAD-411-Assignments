@@ -6,16 +6,16 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="83dp"
-        android:layout_height="41dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="TextView"
         tools:layout_editor_absoluteX="33dp"
         tools:layout_editor_absoluteY="43dp" />
 
     <TextView
         android:id="@+id/amount"
-        android:layout_width="85dp"
-        android:layout_height="45dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="TextView"
         tools:layout_editor_absoluteX="124dp"
         tools:layout_editor_absoluteY="46dp" />
