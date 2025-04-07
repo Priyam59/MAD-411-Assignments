@@ -13,67 +13,68 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-        private lateinit var editName: EditText
-        private lateinit var editAmount: EditText
-        private lateinit var addButton: Button
-        private lateinit var recyclerView: RecyclerView
-        private lateinit var expenseList: MutableList<Expense>
-        private lateinit var adapter: ExpenseAdapter
-        private lateinit var tipButton: Button
+    private lateinit var editName: EditText
+    private lateinit var editAmount: EditText
+    private lateinit var addButton: Button
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var expenseList: MutableList<Expense>
+    private lateinit var adapter: ExpenseAdapter
+    private lateinit var tipButton: Button
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_main)
+    private lateinit var headerFragment: HeaderFragment
+    private lateinit var footerFragment: FooterFragment
 
-            editName = findViewById(R.id.name)
-            editAmount = findViewById(R.id.amount)
-            addButton = findViewById(R.id.add)
-            recyclerView = findViewById(R.id.expenses)
-            tipButton = findViewById(R.id.tip)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        Log.d("ActivityLifecycle", "onCreate is called")
 
-            expenseList = mutableListOf()
-            adapter = ExpenseAdapter(expenseList)
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.adapter = adapter
+        editName = findViewById(R.id.name)
+        editAmount = findViewById(R.id.amount)
+        addButton = findViewById(R.id.add)
+        recyclerView = findViewById(R.id.expenses)
+        tipButton = findViewById(R.id.tip)
 
-            addButton.setOnClickListener {
-                val name = editName.text.toString().trim()
-                val amount = editAmount.text.toString().trim()
+        footerFragment = FooterFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.footer,footerFragment).addToBackStack(null).commit()
 
-                val expense = Expense(name, amount)
-                expenseList.add(expense)
-                adapter.notifyDataSetChanged()
-                updateTotalExpenses()
-                editName.text.clear()
-                editAmount.text.clear()
-            }
+        headerFragment = HeaderFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.header,headerFragment).addToBackStack(null).commit()
 
-            tipButton.setOnClickListener{
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.manulife.ca/personal/plan-and-learn/healthy-finances/financial-planning/ten-simple-money-management-tips.html"))
+        expenseList = mutableListOf()
+        adapter = ExpenseAdapter(expenseList,footerFragment)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
-                startActivity(intent)
-            }
+        addButton.setOnClickListener {
+            val name = editName.text.toString().trim()
+            val amount = editAmount.text.toString().trim()
 
-            val headerFragment = HeaderFragment()
-            val fragmentManager: FragmentManager = supportFragmentManager
-            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-            transaction.add(R.id.header, headerFragment)
-            transaction.commit()
+            val amountDouble = amount.toDoubleOrNull() ?: 0.0
 
-            val footerFragment = FooterFragment()
-            val transaction2: FragmentTransaction = fragmentManager.beginTransaction()
-            transaction2.add(R.id.footer, footerFragment)
-            transaction2.replace(R.id.footer,footerFragment)
-            transaction2.commit()
 
+            val expense = Expense(name, amountDouble.toString())
+
+            expenseList.add(expense)
+            adapter.notifyDataSetChanged()
+            updateTotalExpenses()
+            editName.text.clear()
+            editAmount.text.clear()
         }
+
+        tipButton.setOnClickListener{
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.manulife.ca/personal/plan-and-learn/healthy-finances/financial-planning/ten-simple-money-management-tips.html"))
+
+            startActivity(intent)
+        }
+
+        updateTotalExpenses()
+
+    }
 
     fun updateTotalExpenses() {
-        var total = 0.0
-        for (expense in expenseList) {
-            val amount = expense.amount.toDoubleOrNull() ?: 0.0
-            total += amount
-        }
+        val total = expenseList.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+        footerFragment.updateTotal(total)
     }
 
     override fun onStart() {
@@ -100,4 +101,4 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d("MainActivity", "onDestroy is called")
     }
-    }
+}
